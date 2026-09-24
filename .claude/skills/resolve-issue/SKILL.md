@@ -12,7 +12,7 @@ Talk to the requester in their language (Portuguese for this project, unless tol
 
 - Take the issue number from the arguments. If there's none, ask for it.
 - Ask which base branch to use if the requester didn't say: `beta` for pre-release work, `main` otherwise (see `CONTRIBUTING.md`).
-- Check that `vp --version` works (the project expects the Dev Container) and that `git status` shows a clean working tree. If not, tell the requester and ask how to proceed.
+- Check that `vp --version` works (the project expects the Dev Container), that `gh auth status` shows a logged-in account (the subagents read issues and PRs with `gh`; if not, ask the requester to run `gh auth login`), and that `git status` shows a clean working tree. If any check fails, tell the requester and ask how to proceed.
 
 ## 1. Plan
 

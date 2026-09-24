@@ -1,0 +1,49 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(vp test *)",
+      "Bash(vp check *)",
+      "Bash(vp pack *)",
+      "Bash(vpr check *)",
+      "Bash(vpr depcruise *)",
+      "Bash(vpr test:mutations *)",
+      "Bash(vpr test:e2e *)",
+      "Bash(vpx stryker run *)",
+      "Bash(gh issue view *)",
+      "Bash(gh pr view *)",
+      "Bash(gh pr diff *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "mcp__vuetify__get_component_api_by_version",
+      "mcp__vuetify__get_directive_api_by_version",
+      "mcp__vuetify__get_vuetify_api_by_version",
+      "mcp__vuetify__get_exposed_exports",
+      "mcp__vuetify__get_feature_guides",
+      "mcp__vuetify__get_feature_guide",
+      "mcp__vuetify__get_frequently_asked_questions",
+      "mcp__vuetify__get_release_notes_by_version",
+      "mcp__vuetify__get_upgrade_guide",
+      "mcp__vuetify__get_upgrade_plan",
+      "mcp__vuetify__get_upgrade_rules"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(gh pr create *)",
+      "Bash(gh pr merge *)",
+      "Bash(vp add *)",
+      "Bash(pnpm add *)",
+      "Bash(npm install *)"
+    ],
+    "deny": [
+      "mcp__vuetify__create_bug_report",
+      "mcp__vuetify__create_vuetify_bin",
+      "mcp__vuetify__update_vuetify_bin",
+      "mcp__vuetify__create_vuetify_link",
+      "mcp__vuetify__create_vuetify_playground",
+      "mcp__vuetify__update_vuetify_playground"
+    ]
+  }
+}

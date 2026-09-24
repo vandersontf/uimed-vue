@@ -187,6 +187,28 @@ Use an existing component (e.g. `button`) as the reference, and deliver all of t
 - Coverage threshold is 100%; mutation testing threshold is 100% (break at 100). Don't add code paths without covering tests.
 - E2E tests (Playwright, `e2e/`) run against the built docs preview (`http://localhost:4173/uimed-vue/`). Snapshots/screenshots live under `__snapshots__`/`__screenshot__` next to each spec.
 
+## Library documentation and dependencies
+
+The stack is newer than most AI models' training data (Vue 3.5, Vuetify 4, Vue Router 5, Vite+ 0.2, Vitest 4, TypeScript 6, VitePress 2 alpha, Stryker 10, Playwright 1.62), so don't rely on memory for library APIs.
+
+- Before using an API this repo doesn't use yet, or implementing something from scratch, look it up in the version declared in `package.json`. The project's `.mcp.json` provides two servers for that:
+  - `context7`, with these library IDs: Vue `/websites/vuejs`, Vuetify `/websites/vuetifyjs_en`, Vue Router `/websites/router_vuejs`, Vite+ `/websites/viteplus_dev`, Vitest `/vitest-dev/vitest`, Vue Test Utils `/vuejs/test-utils`, Playwright `/microsoft/playwright`, VitePress `/vuejs/vitepress`, Stryker `/stryker-mutator/stryker-js`.
+  - `vuetify`, Vuetify's own server, for component and composable APIs and release notes. Its tools that create or update bins, links, playgrounds or bug reports publish content outside the repo and are denied in `.claude/settings.json`.
+  - Queries to both servers leave your machine: describe what you need in generic terms and never include source code or business rules.
+- Before adding a dependency, check whether Vuetify, `@nexdom/shared` or the current dependencies already cover the need. If not, confirm with the requester, check the package's docs, maintenance and license, and declare runtime dependencies as `peerDependencies` (enforced by dependency-cruiser's `use-peer-deps` rule).
+- Vuetify is an internal detail: consumers use the library's props, and `docs` never mention Vuetify.
+
+## AI agents
+
+Besides this file, the repo ships Claude Code subagents in `.claude/agents/`:
+
+- `issue-planner`: turns an issue into an API proposal plus open questions, before any code is written.
+- `issue-implementer`: implements an issue end to end (source, tests, docs, E2E).
+- `code-reviewer`: reviews a branch or PR against these conventions, without changing code.
+- `dependency-updater`: evaluates and applies dependency updates, such as Dependabot PRs.
+
+To resolve an issue, run `/resolve-issue <number>` (`.claude/skills/resolve-issue/`). It chains planner, implementer and reviewer, asks you about open questions and waits for your approval of the public API before any code is written.
+
 ## Git workflow
 
 - Trunk-based development. `main` is the only long-lived branch (`beta`/`alpha` exist only for pre-release/prototype work — see CONTRIBUTING.md for when to use them). `main`, `beta`, `alpha` are all protected against direct pushes.

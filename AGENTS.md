@@ -30,7 +30,7 @@ Add the Vite plugin:
 
 ```ts
 // vite.config.ts
-import { vitePluginUimed } from "@nexdom/uimed-vue/plugins.ts";
+import { vitePluginUimed } from "@nexdom/uimed-vue/plugins";
 
 // ...
 
@@ -55,18 +55,18 @@ createApp(App).use(uimed).mount("#app");
 
 ### Usage
 
-Place the `Root` component at the top of `App.vue`, then add other components as needed:
+Place the `UMain` component at the top of `App.vue`, then add other components as needed:
 
 ```vue
 <!-- App.vue -->
 <template>
-  <root>
+  <u-main>
     <!-- ... -->
-  </root>
+  </u-main>
 </template>
 
 <script setup lang="ts">
-import { Root } from "@nexdom/uimed-vue/components";
+import { UMain } from "@nexdom/uimed-vue/components";
 </script>
 ```
 
@@ -109,7 +109,7 @@ On Windows, prefer VSCode's "Dev Containers: Clone Repository in Container Volum
 
 ## Commands
 
-- `vpr check` — lint, formatter, and type-check (requires `build`/`pack` to have run first for the type-check step)
+- `vpr check` — lint, formatter, and type-check (builds the library first, since the type-check reads `dist`)
 - `vp test --coverage` — unit tests with coverage (Vitest, jsdom, 100% coverage threshold enforced)
 - `vpr test:mutations` — mutation tests (Stryker; thresholds: high 100, low 100, break 100). It starts one test runner per CPU core; on machines with limited memory, run `vpx stryker run --concurrency 4` instead
 - `vpr test:e2e` — E2E tests (Playwright, runs against the built docs preview site)
@@ -150,6 +150,16 @@ Use an existing component (e.g. `button`) as the reference, and deliver all of t
 5. `e2e/components/<name>.spec.ts` covering the guide's interactive examples and a "UI consistency" screenshot check (plus accessible snapshots where relevant). Commit the generated files under `__snapshots__`/`__screenshot__`.
 6. The full CI sequence passing locally.
 
+## Adding a new composable
+
+Use an existing composable (e.g. `use-toast`) as the reference, and deliver in the same PR:
+
+1. `src/composables/<group>/<name>.ts` and `__tests__/<name>.test.ts`, plus the types in the group's `types.ts`. If it relies on an internal component (as `useToast` relies on the internal `Toast` rendered by `UMain`), that component follows the component layout but isn't exported.
+2. The export in `src/composables/index.ts`, and its assertion in `src/composables/__tests__/index.test.ts`.
+3. A usage guide at `docs/guide/composables/<name>.md` and an API reference at `docs/api/composables/<name>.md`, both in Portuguese, registered in both sidebars at `docs/.vitepress/config.ts` and listed in `docs/api/index.md`.
+4. `e2e/composables/<name>.spec.ts` covering the guide's examples and a "UI consistency" screenshot check.
+5. The full CI sequence passing locally.
+
 ## Code conventions
 
 - All `src` code is written in English. `docs` content is written in Portuguese (aimed at Brazilian users), even though file/dir names stay in English.
@@ -184,6 +194,7 @@ Use an existing component (e.g. `button`) as the reference, and deliver all of t
 
 - Unit tests use Vitest + `@vue/test-utils`, with `vueTestUtilsPluginUimed()` from `@/unit-test.ts` to mount a Vuetify instance.
 - Global unit test setup (`src/__tests__/setup.ts`) stubs `visualViewport`, uses fake timers, and silences `console.error/warn/log`.
+- With fake timers in jsdom, Vuetify transitions (e.g. of `VDialog`, `VMenu`) don't finish on their own. Emit the transition events on the Vuetify component (`wrapper.findComponent(VDialog).vm.$emit("afterLeave")`) or advance the timers with `await vi.runAllTimersAsync()`.
 - Coverage threshold is 100%; mutation testing threshold is 100% (break at 100). Don't add code paths without covering tests.
 - E2E tests (Playwright, `e2e/`) run against the built docs preview (`http://localhost:4173/uimed-vue/`). Snapshots/screenshots live under `__snapshots__`/`__screenshot__` next to each spec.
 

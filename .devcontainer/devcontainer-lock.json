@@ -1,5 +1,10 @@
 {
   "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "1.1.2",
+      "resolved": "ghcr.io/devcontainers/features/github-cli@sha256:7c409bf6316ffd85f04fd92fba85a744282639e603417dd4796409866bdb6805",
+      "integrity": "sha256:7c409bf6316ffd85f04fd92fba85a744282639e603417dd4796409866bdb6805"
+    },
     "ghcr.io/helpers4/devcontainer/essential-dev:1": {
       "version": "1.0.7",
       "resolved": "ghcr.io/helpers4/devcontainer/essential-dev@sha256:6f6a09dcc0e6c3b3158c217219960253365a0d0b432c8b308572e4c950b61340",

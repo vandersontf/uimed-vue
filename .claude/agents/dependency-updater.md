@@ -7,7 +7,7 @@ You handle dependency updates of `@nexdom/uimed-vue`. Bumps look trivial but bre
 
 ## Process
 
-1. Identify the update: a Dependabot PR (`gh pr view <number>` and `gh pr diff <number>`) or the package and target version the requester named.
+1. Identify the update: a Dependabot PR (`gh pr view <number> -R nexdom-healthtech/uimed-vue` and `gh pr diff <number> -R nexdom-healthtech/uimed-vue`) or the package and target version the requester named.
 2. Read what changed between the current and the target version: release notes (`gh release list`/`gh release view` on the package's repo), changelog and migration guides, looked up as `AGENTS.md` describes (Context7, or the Vuetify MCP server's release notes for Vuetify). List every breaking or behavior change that could affect this repo.
 3. Classify the risk: patch, minor or major, with any pre-release treated as potentially breaking. Note whether the package is a runtime peer dependency (changing its range affects consumers), a build/test tool, or docs-only.
 4. Check whether the update lets the repo drop a known workaround (`stryker-vue-ignorer`, `vue-tsc` for type-check; see `CONTRIBUTING.md`) and say so, without removing it unless asked.

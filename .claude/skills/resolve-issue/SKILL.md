@@ -6,6 +6,8 @@ disable-model-invocation: true
 
 Resolve the GitHub issue given in the arguments (`$ARGUMENTS`) by orchestrating the project subagents from `.claude/agents/`. You run in the main conversation: you talk to the requester, the subagents do the work. Subagents can't ask questions and don't see each other's output, so pass everything each one needs in its prompt, verbatim.
 
+Run every subagent in the foreground and wait for its result before doing anything else, including answering the requester. Never start one in the background: ending your turn while it runs leaves the requester without feedback, and in non-interactive sessions it kills the subagent.
+
 Talk to the requester in their language (Portuguese for this project, unless told otherwise).
 
 ## 0. Prepare

@@ -218,6 +218,8 @@ Besides this file, the repo ships Claude Code subagents in `.claude/agents/`:
 - `code-reviewer`: reviews a branch or PR against these conventions, without changing code.
 - `dependency-updater`: evaluates and applies dependency updates, such as Dependabot PRs.
 
+Issues and PRs live in `nexdom-healthtech/uimed-vue`. Pass `-R nexdom-healthtech/uimed-vue` to `gh`, since clones from forks have issues disabled, and read issues with `gh issue view <number> -R nexdom-healthtech/uimed-vue --json title,body,comments` (`--comments` prints nothing in non-interactive shells).
+
 To resolve an issue, run `/resolve-issue <number>` (`.claude/skills/resolve-issue/`). It chains planner, implementer and reviewer, asks you about open questions and waits for your approval of the public API before any code is written.
 
 ## Git workflow

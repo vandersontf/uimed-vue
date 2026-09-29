@@ -165,7 +165,10 @@ Use an existing composable (e.g. `use-toast`) as the reference, and deliver in t
 - All `src` code is written in English. `docs` content is written in Portuguese (aimed at Brazilian users), even though file/dir names stay in English.
   - `docs` must not mention Vuetify
   - A new component/composable must be listed in its guide page (`docs/guide/…`), its API page (`docs/api/…`), both sidebars in `docs/.vitepress/config.ts`, the guide index table (`docs/guide/index.md`) and the API index list (`docs/api/index.md`).
-- Never write CSS or `<style>` blocks, and expose styling to consumers only through props. Inside the library's own components, a Vuetify utility class is acceptable when no Vuetify prop covers the need (e.g. `text-wrap` on a card title), with a comment saying why.
+- Never write CSS or `<style>` blocks, and expose styling to consumers only through props.
+- Don't add spacing to Vuetify components: no padding or margin utility classes (`pa-*`, `pt-6`, `px-4`, `ma-2`, ...) and no spacing props overriding the defaults. Vuetify already applies Material Design 3 spacing, and overriding it breaks what it handles on its own, such as button paddings and the scrollbar of scrollable content. If the default spacing looks wrong, stop and ask instead of adjusting it.
+- Prefer a Vuetify component's own props to building its parts by hand (e.g. `title`/`text` on `v-card` instead of `v-card-item` > `v-card-title` > `v-card-text`). A non-spacing utility class is acceptable only when no prop covers the need (e.g. `text-wrap` on a card title), with a comment saying why.
+- Keep components thin: a component wires props, slots and events to Vuetify. Logic beyond that (focus management, queues, DOM lookups, comparisons) goes into an internal composable with its own unit tests.
 - Path aliases: `@/*` → `src/*`, `@e2e/*` → `e2e/*`.
 - Every public component follows this pattern to block access to internals and give it an editor-hover description:
 
@@ -199,7 +202,18 @@ Use an existing composable (e.g. `use-toast`) as the reference, and deliver in t
 - With fake timers in jsdom, Vuetify transitions (e.g. of `VDialog`, `VMenu`) don't finish on their own. Emit the transition events on the Vuetify component (`wrapper.findComponent(VDialog).vm.$emit("afterLeave")`) or advance the timers with `await vi.runAllTimersAsync()`.
 - Coverage threshold is 100%; mutation testing threshold is 100% (break at 100). Don't add code paths without covering tests. Mutants that don't compile are reported as compile errors and don't count toward the score.
 - E2E tests (Playwright, `e2e/`) run against the built docs preview (`http://localhost:4173/uimed-vue/`). Snapshots/screenshots live under `__snapshots__`/`__screenshot__` next to each spec.
+- Before keeping a new screenshot as a baseline, open it and check it against how plain Vuetify renders the same component: overflowing content shows its scrollbar, buttons and cards keep their native paddings, nothing touches the edges or gets clipped. A screenshot that only "looks fine" isn't enough: name what you checked in your report.
+- Never run Stryker at the same time as another test command: they share build output and Stryker fails with `ENOENT`.
+- Unit tests that mount several apps at once (e.g. nested dialogs) need a distinct `global.config.idPrefix` per mount, since `useId()` restarts in each app.
 - In E2E, a paused `page.clock` also freezes transitions, so overlays never finish leaving. Use `page.clock.pauseAt` to hold time-based work (e.g. a demo action with `setTimeout`), `page.clock.fastForward` to complete it, then `page.clock.resume()` before expecting the overlay to be hidden (see `e2e/composables/use-confirm.spec.ts`).
+
+## Public API design
+
+The public API is hard to change once released, and every prop, event or option is something consumers can misuse and maintainers must keep. Keep it minimal:
+
+- Only add what the issue asks for. Anything beyond it (an extra prop, event, option or variant) is a separate decision the maintainers must approve explicitly, not a default.
+- Behaviors meant to be consistent across the library aren't per-instance options. For example, every dialog closes with `Esc`, a click outside it or the browser's back button; a flag to block that stays internal.
+- Reuse existing contracts before creating new ones: `v-model` for open/closed state instead of extra lifecycle events such as `afterLeave`, the `actions` shape of `USection` for buttons, the option names of existing composables.
 
 ## Library documentation and dependencies
 

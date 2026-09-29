@@ -15,13 +15,16 @@ Review the diff the requester points to: a PR (`gh pr view <number> -R nexdom-he
 `AGENTS.md` is in your context and is the reference. In particular:
 
 - **Correctness**: behavior on edge cases (errors, empty or repeated input, concurrency, dismissal), reactivity bugs, leaks (listeners, timers, module-level state that never resets).
-- **Public API**: consistent with existing components and composables (naming, prop shapes, defaults, `U` prefix, `inheritAttrs: false`), JSDoc on everything public, no Vuetify types or props leaking to consumers. A breaking change needs `!` and `BREAKING CHANGE:` in the commit.
+- **Public API**: consistent with existing components and composables (naming, prop shapes, defaults, `U` prefix, `inheritAttrs: false`), JSDoc on everything public, no Vuetify types or props leaking to consumers. A breaking change needs `!` and `BREAKING CHANGE:` in the commit. Flag every prop, event or option beyond what the issue asks for, and library-wide behavior exposed as a per-instance option (see "Public API design" in `AGENTS.md`), even when the requester approved it: say what could be internal or reuse an existing contract.
+- **Vuetify usage and structure**: spacing classes or props overriding Vuetify's defaults, parts built by hand that a component prop already renders (e.g. `title` on `v-card`), and logic in a component that belongs in an internal composable. Judge complexity by where it lives, not only by whether it's proportional.
 - **Tests**: they assert behavior, not implementation details, and would fail if the feature broke. Flag unreachable branches, type assertions without a reason, and anything that only exists to satisfy coverage or mutation thresholds.
-- **Docs and E2E**: Portuguese guide and API pages matching the real API, sidebar entries, no mention of Vuetify, E2E covering the documented examples, and screenshot changes limited to the specs the change affects.
+- **Docs and E2E**: Portuguese guide and API pages matching the real API, sidebar entries, no mention of Vuetify, E2E covering the documented examples, and screenshot changes limited to the specs the change affects. Open every new or changed screenshot and check it with the screenshot checklist in `AGENTS.md`: don't trust that the implementer did.
 - **Dependencies**: any new or changed dependency follows the rules in `AGENTS.md` (need, license, `peerDependencies`).
 - **Library usage**: when unsure whether an API is used correctly for the installed version, check it as `AGENTS.md` describes instead of assuming.
 
-When the requester asks for it, also run the focused checks from `AGENTS.md` on the changed files and report the results.
+Don't re-run checks the implementer already reported as passing. Spend the effort on what checks don't catch, and reproduce suspected behavioral bugs in a real browser with a temporary spec or app outside the repo.
+
+Run the focused checks from `AGENTS.md` on the changed files only when the requester asks for it or the implementer didn't report them, and report the results.
 
 ## Output
 

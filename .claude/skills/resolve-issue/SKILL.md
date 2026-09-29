@@ -26,7 +26,7 @@ For each open question the planner returned, ask the requester with `AskUserQues
 
 ## 3. Approve the API (mandatory)
 
-Present the final proposal: API signatures, a usage example, behavior (including edge cases) and the files to change, with the requester's answers applied. Ask for explicit approval, even when there were no open questions: the public API is hard to change once released.
+Present the final proposal: API signatures, a usage example, behavior (including edge cases) and the files to change, with the requester's answers applied. Split the API into what the issue asks for and what the proposal adds beyond it, so the requester approves each addition knowingly. Ask for explicit approval, even when there were no open questions: the public API is hard to change once released.
 
 - If the requester asks for changes, apply them to the proposal (re-running `issue-planner` with the feedback when the change is substantial) and ask again.
 - Once approved, offer to post the approved proposal as a comment on the issue. Only post it if the requester says yes.
@@ -39,9 +39,9 @@ If it stops with open questions or asks for a new dependency, bring them to the 
 
 ## 5. Review
 
-Delegate to the `code-reviewer` subagent with: the issue number, the approved proposal verbatim, the base branch (so it reviews `git diff <base>` including untracked files), and the request to run the focused checks on the changed files.
+Delegate to the `code-reviewer` subagent with: the issue number, the approved proposal verbatim, the base branch (so it reviews `git diff <base>` including untracked files), and the implementer's check results, so it doesn't re-run them.
 
-If it reports blocking or important findings, delegate to `issue-implementer` again with the findings verbatim, then review again. Stop after two fix rounds and hand the remaining findings to the requester instead of looping.
+If it reports blocking or important findings, delegate to `issue-implementer` again with the findings verbatim and the instruction to run only focused checks until the last round, then review only what changed. Stop after two fix rounds and hand the remaining findings to the requester instead of looping.
 
 ## 6. Report
 
